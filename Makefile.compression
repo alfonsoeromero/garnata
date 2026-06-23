@@ -1,0 +1,63 @@
+#####################################################
+# Makefile for the Garnata Retrieval System: compression library
+# Alfonso E. Romero 
+# <aromero@correo.ugr.es>
+# April, 2006
+#####################################################
+
+
+#####################################################################
+# Predefined vars
+#####################################################################
+
+CXX=g++
+CFLAGS=-c -g -O3 -pipe -W -Wall -ansi -pedantic -march=nocona
+OBJ=./obj
+SRC=./compression
+LIB=./lib
+	
+#####################################################################
+# Library 
+#####################################################################
+
+all: libcompress
+
+libcompress : $(OBJ)/BasicInputBinaryBuffer.o $(OBJ)/BasicOutputBinaryBuffer.o \
+	$(OBJ)/InputCompressedBinaryFile.o $(OBJ)/OutputCompressedBinaryFile.o $(OBJ)/VariableByteCoder.o \
+	$(OBJ)/InputIndexFile.o $(OBJ)/OutputIndexFile.o
+	ar r $(LIB)/libcompress.a $(OBJ)/BasicInputBinaryBuffer.o $(OBJ)/BasicOutputBinaryBuffer.o \
+		$(OBJ)/InputCompressedBinaryFile.o $(OBJ)/OutputCompressedBinaryFile.o $(OBJ)/OutputIndexFile.o \
+		$(OBJ)/InputIndexFile.o $(OBJ)/VariableByteCoder.o
+
+#####################################################################
+# library object files
+#####################################################################
+		
+$(OBJ)/BasicInputBinaryBuffer.o : $(SRC)/BasicInputBinaryBuffer.cpp
+	$(CXX) $(CFLAGS) $(SRC)/BasicInputBinaryBuffer.cpp -o $(OBJ)/BasicInputBinaryBuffer.o 
+	
+$(OBJ)/BasicOutputBinaryBuffer.o : $(SRC)/BasicOutputBinaryBuffer.cpp
+	$(CXX) $(CFLAGS) $(SRC)/BasicOutputBinaryBuffer.cpp -o $(OBJ)/BasicOutputBinaryBuffer.o
+	
+$(OBJ)/InputCompressedBinaryFile.o : $(SRC)/InputCompressedBinaryFile.cpp 
+	$(CXX) $(CFLAGS) $(SRC)/InputCompressedBinaryFile.cpp -o $(OBJ)/InputCompressedBinaryFile.o
+	
+$(OBJ)/OutputCompressedBinaryFile.o : $(SRC)/OutputCompressedBinaryFile.cpp 
+	$(CXX) $(CFLAGS) $(SRC)/OutputCompressedBinaryFile.cpp -o $(OBJ)/OutputCompressedBinaryFile.o
+
+$(OBJ)/OutputIndexFile.o : $(SRC)/OutputIndexFile.cpp 
+	$(CXX) $(CFLAGS) $(SRC)/OutputIndexFile.cpp -o $(OBJ)/OutputIndexFile.o
+
+$(OBJ)/InputIndexFile.o : $(SRC)/InputIndexFile.cpp 
+	$(CXX) $(CFLAGS) $(SRC)/InputIndexFile.cpp -o $(OBJ)/InputIndexFile.o
+
+$(OBJ)/VariableByteCoder.o : $(SRC)/VariableByteCoder.cpp
+	$(CXX) $(CFLAGS) $(SRC)/VariableByteCoder.cpp -o $(OBJ)/VariableByteCoder.o
+
+#####################################################################
+	
+clean : 
+	\rm $(OBJ)/*
+	
+#####################################################################
+

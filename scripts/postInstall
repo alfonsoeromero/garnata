@@ -1,0 +1,46 @@
+#!/bin/bash
+# Post-install script - The Garnata Retrieval System
+# (c) Alfonso E. Romero, 2005
+# 
+
+####################################################
+
+
+echo "Would you like to:"
+echo "1.- store indexes on your home space (in ~/.garnata)? or"
+echo "2.- store them in other place?"
+echo -n "enter the number of the desired option: "
+
+read var
+
+case "$var" in
+	[1] ) mkdir ~/.garnata ;;
+  [2] ) echo -n "Enter the absolute path of the directory to store indexes: "
+        read direct
+        echo "Creating symbolic link..."
+        ln -s direct ~/.garnata
+        ;;
+  *   ) echo "Bad option. Exiting"
+      exit -1;;
+esac
+
+####################################################
+
+echo "Creating auxiliary directories..."
+
+mkdir ~/.garnata/collections
+mkdir ~/.garnata/indexes
+mkdir ~/.garnata/weight
+mkdir ~/.garnata/stopwords
+
+####################################################
+
+echo "Creating configuration file..."
+
+cat > ~/.garnata/conf_file <<EOD
+0
+1
+EOD
+
+####################################################
+

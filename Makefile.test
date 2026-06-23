@@ -1,0 +1,56 @@
+# Makefile for the test programs
+
+
+SRC=src
+SRCTEST=test
+OBJ=obj
+OBJTEST=objtest
+BIN=bintest
+LIB=lib
+INC=include
+COMP=compression
+CXX=g++
+CXXFLAGS=-g -O3 -pipe -march=nocona -W -Wall
+
+
+all : testCompression testOccurrence testUnit
+
+#########################################################
+
+testOccurrence : $(OBJTEST)/testOccurrence.o $(OBJ)/Occurrence.o $(OBJ)/Lexicon.o $(OBJ)/Term.o $(OBJ)/Globals.o $(LIB)/libcompress.a
+	$(CXX) -o $(BIN)/testOccurrence $^
+
+testCompression : $(OBJTEST)/testCompression.o $(LIB)/libcompress.a
+	$(CXX) -o $(BIN)/testCompression $^
+
+testUnit : $(OBJTEST)/testUnit.o $(OBJ)/Unit.o $(OBJ)/UnitReader.o $(LIB)/libcompress.a
+	$(CXX) -o $(BIN)/testUnit $^
+
+$(LIB)/libcompress.a : 
+	make -f Makefile.compression
+
+$(OBJTEST)/testCompression.o : $(COMP)/testCompression.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+$(OBJTEST)/testUnit.o : $(SRCTEST)/testUnit.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+$(OBJTEST)/testOccurrence.o : $(SRCTEST)/testOccurrence.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+$(OBJ)/Occurrence.o : $(SRC)/Occurrence.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+$(OBJ)/Lexicon.o : $(SRC)/Lexicon.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+$(OBJ)/Term.o : $(SRC)/Term.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+$(OBJ)/Unit.o : $(SRC)/Unit.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+$(OBJ)/UnitReader.o : $(SRC)/UnitReader.cpp
+	$(CXX) -c $(CXXFLAGS) $< -I $(INC) -o $@
+
+ 
