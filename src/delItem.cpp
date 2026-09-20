@@ -127,6 +127,11 @@ int main(int argc, char* argv[])
     case INDEX:
     {
       string col(argv[2]), index(argv[3]);
+      if ( RUsure ( "About to remove index: " + index + " of collection " + col +
+                    ". Are you sure? (y/n)" ) != 'Y') {
+        cout << "Operation canceled" << endl;
+        break;
+      }
       if(!g.setCurrent(col))
       {
         cerr << "ERROR: bad collection name\n" << flush;
