@@ -80,7 +80,7 @@ class Globals {
    *  @param _error error string which will be printed
    *  @post the execution is aborted
    */
-  static void errorAndExit(char *_error);
+  static void errorAndExit(const char *_error);
 
   /** 
    *  Informs of a tiny error and continues execution

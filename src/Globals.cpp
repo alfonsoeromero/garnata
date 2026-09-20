@@ -57,7 +57,7 @@ void Globals::showWarning(char* _message)
 
 // ==================================================================
 
-void Globals::errorAndExit(char* _error) 
+void Globals::errorAndExit(const char* _error) 
 {
   std::cerr << _error << endl << flush;
   exit(-1);
