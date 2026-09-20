@@ -59,10 +59,10 @@ vector< Result >  ID<T> ::makeQuery(const ProcessedQuery& pq)
   vector< NodeGroup<T> > groups;
     
   // ================= 1st step: we propagate probabilities to the final units ===================
-  propagateFinalUnits(pq, N_final, groups);
+  this->propagateFinalUnits(pq, N_final, groups);
   
   // =================== 2nd step: we propagate probabilities to the complex units ===================
-  propagateComplexUnits(N_final, N_complex);
+  this->propagateComplexUnits(N_final, N_complex);
   
   // =================== 3rd step: we readjust probability values, and
   // =================== construct a list of nodes instead two maps  
@@ -91,11 +91,11 @@ vector< Result >  ID<T> ::makeQuery(const ProcessedQuery& pq)
   partial_sort(vec.begin(), vec.begin() + std::min((unsigned)vec.size(), _BNR_SD<T>::NUMDOCS), vec.begin(), NodeResult_ID_Ptr<T>());
   
   // ================ 4th step: list is cut down, if needed =====================================
-  cutDownNodeResultVector (vec);
+  this->cutDownNodeResultVector(vec);
 
   // ================ 6th step: building of the result =====================================
   vector<Result> res;
-  buildResult(res, vec, _BNR_SD<T>::dtds->getDTDbyId(0) );
+  this->buildResult(res, vec, _BNR_SD<T>::dtds->getDTDbyId(0) );
   
   // Return value
   return res;

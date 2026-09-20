@@ -22,6 +22,9 @@
 
 #include "Unit.h"
 #include <utility>
+#include <vector>
+
+class NodeTree;
 
 class NodeResult {
   protected:
