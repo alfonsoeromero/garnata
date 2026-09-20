@@ -1,2 +1,12 @@
 *~
 *.o
+
+# Build output
+obj/
+lib/
+bin/
+objtest/
+bintest/
+
+# Test binaries
+test/funtDumper
