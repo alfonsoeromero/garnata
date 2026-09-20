@@ -55,8 +55,12 @@ void UnitReader::read(fstream& ifs)
 
 // ==================================================================
 
-UnitReader :: UnitReader (unsigned _id) : id(_id)
+UnitReader :: UnitReader (unsigned _id) : Unit ()
 {
+  // 'id' belongs to the base class, so it cannot be set in the
+  // initialiser list; the remaining fields are filled in by read()
+  id = _id;
+
   //1st: we position the pointer of funt
   funt.seekg(_id * SIZE_UNIT, std::ios_base::beg);
   if (funt.fail())
