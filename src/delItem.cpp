@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cstdio>
+#include <cstring>
 #include "Index.h"
 #include "Collection.h"
 #include "Garnata.h"

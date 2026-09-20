@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cstring>
 #include "Globals.h"
 #include "Garnata.h"
 #include <fstream>

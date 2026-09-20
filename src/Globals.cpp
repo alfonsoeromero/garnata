@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
 #include "Globals.h"
 #include <iostream>
 #include <cstdio>
