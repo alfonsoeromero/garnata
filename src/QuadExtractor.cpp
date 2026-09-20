@@ -42,7 +42,7 @@ void QuadExtractor::add(const string& _s)
 {
     string s = _s;
     // for each term appearing on this unit
-    std::replace_if(s.begin(), s.end(), std::bind2nd(std::equal_to<char>(),'\\'), ' ');
+    std::replace_if(s.begin(), s.end(), [](char c) { return c == '\\'; }, ' ');
     
     istringstream is(s);
     

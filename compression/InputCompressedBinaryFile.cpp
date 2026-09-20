@@ -125,7 +125,7 @@ void InputCompressedBinaryFile::readBoundedLongList(vector<long>& array)
   readLong(mini);
   readLongList(array);
   
-  std::transform(array.begin(), array.end(), array.begin(), bind2nd(plus<long>(), mini));
+  std::transform(array.begin(), array.end(), array.begin(), [mini](long x) { return x + mini; });
 }
 
 // ===========================================================================
