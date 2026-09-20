@@ -55,7 +55,7 @@ request processArgs(int argc, char* argv[])
     
     case 5:
       if (!strcmp(argv[1], "weight"))
-        retval = INDEX;
+        retval = WEIGHT;
       else retval = ERR;
       break;
     
@@ -72,7 +72,7 @@ void showHelp()
 {
   cerr << "'delItem collection X':\tdeletes the collection X, and its " << endl
        << "     associated indexes" << endl
-       << "'delitem index X Y':\tdeletes the index Y of the collection Y" << endl
+       << "'delItem index X Y':\tdeletes the index Y of the collection X" << endl
        << "'delItem stopword X':\tdeletes the stopwords file X (indexes using this" << endl
        << "     file may not work properly" << endl
        << "'delItem weight X Y Z':\tdeletes the weight file Z, of the index Y," << endl
@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
     case WEIGHT:
     {
       string col(argv[2]), indexName(argv[3]), file(argv[4]);
-      if ( RUsure ( "About to remove weight file file: " + file + ". Are you sure? (y/n)"  ) == 'Y') {
+      if ( RUsure ( "About to remove weight file: " + file + ". Are you sure? (y/n)"  ) == 'Y') {
         if (!g.setCurrent(col)){
           cerr << "ERROR: bad collection name\n" << flush;
           return -1;
