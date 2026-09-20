@@ -37,6 +37,9 @@ LIB=./lib
 # Library 
 #####################################################################
 
+# Output directories are not tracked by git: create them if missing
+$(shell mkdir -p $(OBJ) $(LIB))
+
 all: libcompress
 
 libcompress : $(OBJ)/BasicInputBinaryBuffer.o $(OBJ)/BasicOutputBinaryBuffer.o \

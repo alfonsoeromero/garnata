@@ -90,7 +90,16 @@ addItem_OBJS=$(OBJ)/addItem.o $(OBJ)/Collection.o $(OBJ)/Index.o $(OBJ)/Globals.
 
 #####################################################################
 
+# Output directories are not tracked by git: create them if missing
+$(shell mkdir -p $(OBJ) $(BIN) $(LIB))
+
 all: $(ALL_LIBS) $(ALL_PROGRAMS)
+
+# End-to-end smoke test (test/smoke_test.sh)
+test: all
+	@./test/smoke_test.sh $(BIN)
+
+.PHONY: all test clean libcompress
 
 libcompress : $(COMPRESSION)/*.cpp
 	make -f Makefile.compression
