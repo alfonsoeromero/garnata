@@ -86,7 +86,7 @@ class Globals {
    *  Informs of a tiny error and continues execution
    *  @param _message warning string which will be printed
    */
-  static void showWarning(char* _message);
+  static void showWarning(const char* _message);
   
   /** Tells if a pair is greater than other (using the first
 	  component)

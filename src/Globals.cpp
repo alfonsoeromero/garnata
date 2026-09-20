@@ -49,7 +49,7 @@ string Globals::home_stopwords = home + string("stopwords/");
 
 // ==================================================================
 
-void Globals::showWarning(char* _message)
+void Globals::showWarning(const char* _message)
 {
   std::cerr << _message << endl << flush;
   std::clog << "[WARNING!] " << _message << endl << flush;
