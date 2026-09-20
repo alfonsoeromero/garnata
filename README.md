@@ -237,12 +237,12 @@ bin/getInfo index mycollection myindex      # details of an index
 
 bin/delItem collection mycollection         # deletes the collection and all its indexes
 bin/delItem index mycollection myindex
+bin/delItem weight mycollection myindex w_classic
 bin/delItem stopword english
 ```
 
 ## Known issues
 
-- **`delItem weight` is dangerous:** the argument parser maps the `weight` command to the *index* deletion branch, so `delItem weight COL INDEX FILE` removes the index named `INDEX` instead of the weight file. Do not use it until fixed (`src/delItem.cpp`, `processArgs`).
 - **`scripts/postInstall`, option 2**, creates a link to the literal string `direct` instead of the directory entered (`$direct` is missing).
 - `queryINEX` is hard-wired to the INEX 2006 setup (111 topics, *Thorough* task); see [INEX batch runs](#7-inex-batch-runs).
 - `queryIndexXML.cpp`, `WeightBM25.cpp` and some test programs referenced by `Makefile.test` are not part of the main build, and some of them refer to headers or files that are not in the repository.
@@ -254,6 +254,7 @@ bin/delItem stopword english
 
 - **Ranking bug (top-k).** `partial_sort` was called with `vec.begin()` as the end of the range, so only the first `NUMDOCS` candidates, in processing order, were sorted and returned. With the INEX limit of 1500 results, any query matching more units than that (the usual case on the INEX Wikipedia collection) returned an essentially arbitrary subset of them. This is the bug that affected our INEX 2006 runs; it was fixed in later internal versions, but not in the snapshot published as `v0.1`.
 - **Silent indexing bug with Xerces-C 3.** The SAX `characters()` handler no longer matched the Xerces-C 3 signature, so it would have compiled but never been called, producing indexes without text. All handler methods are now marked `override`.
+- **`delItem weight` deleted the whole index.** The argument parser mapped the `weight` command to the index deletion branch, so `delItem weight COL INDEX FILE` removed the index `INDEX` (without asking for confirmation) instead of the weight file. Deleting an index now also asks for confirmation, like the other deletions.
 - The unfinished global nIdf variant prevented the influence-diagram models from compiling; it is now disabled by default (see [SID and CID](#sid-and-cid-influence-diagram-models)).
 
 ## Publications
