@@ -60,7 +60,7 @@ vector< Result >  BNR_SD ::makeQuery(const ProcessedQuery& pq)
   makeListOfNodes(vec, N_final, N_complex);
   
   // ================ 4th step: list is cut down, if needed =====================================
-  std::partial_sort(vec.begin(), vec.begin() + std::min((unsigned)vec.size(), NUMDOCS), vec.begin(), _BNR_SD<NodeResult>::NodeResultPtr<NodeResult>() );
+  std::partial_sort(vec.begin(), vec.begin() + std::min((unsigned)vec.size(), NUMDOCS), vec.end(), _BNR_SD<NodeResult>::NodeResultPtr<NodeResult>() );
   cutDownNodeResultVector (vec);
 
   // ================ 6th step: building of the result =====================================

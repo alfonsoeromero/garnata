@@ -97,7 +97,7 @@ vector< Result >  ID<T> ::makeQuery(const ProcessedQuery& pq)
   _BNR_SD<T>::makeListOfNodes(vec, N_final, N_complex);
   
   // we sort the vector by RSV of each unit
-  partial_sort(vec.begin(), vec.begin() + std::min((unsigned)vec.size(), _BNR_SD<T>::NUMDOCS), vec.begin(), NodeResult_ID_Ptr<T>());
+  partial_sort(vec.begin(), vec.begin() + std::min((unsigned)vec.size(), _BNR_SD<T>::NUMDOCS), vec.end(), NodeResult_ID_Ptr<T>());
   
   // ================ 4th step: list is cut down, if needed =====================================
   this->cutDownNodeResultVector(vec);
