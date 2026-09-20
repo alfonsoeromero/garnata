@@ -1,4 +1,21 @@
-
+/*
+ * porter_stemmer.cpp - The Garnata Retrieval System
+ *
+ * Third-party code: Porter stemming algorithm, ANSI C reference
+ * implementation by Martin Porter.
+ *   https://tartarus.org/martin/PorterStemmer/
+ *
+ * The author states that this software is completely free for any
+ * purpose, and that its licensing terms are never more restrictive than
+ * the BSD License. It is therefore NOT covered by Garnata's GPL notice.
+ *
+ * Modifications with respect to the original release:
+ *   - compiled as C++ (C++ headers, 'using namespace std');
+ *   - entry point renamed from stem() to porter_stem() and exported
+ *     (the demo main() and file-handling code have been removed).
+ *
+ * The original author's notes follow unchanged.
+ */
 
 /* This is the Porter stemming algorithm, coded up in ANSI C by the
    author. It may be be regarded as cononical, in that it follows the
@@ -46,7 +63,6 @@ using namespace std;
 
 static char * b;       /* buffer for word to be stemmed */
 static int k,k0,j;     /* j is a general offset into the string */
-char* otro;
 /* cons(i) is TRUE <=> b[i] is a consonant. */
 
 int cons(int i)
@@ -315,7 +331,6 @@ int porter_stem(char * p, int i, int j)
 {  b = p; k = j; k0 = i; /* copy the parameters into statics */
    if (k <= k0+1) return k; /*-DEPARTURE-*/
 
-  otro = p;
    /* With this line, strings of length 1 or 2 don't go through the
       stemming process, although no mention is made of this in the
       published algorithm. Remove the line to match the published
