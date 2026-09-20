@@ -8,6 +8,8 @@
 # it, computes and activates a weight set, and runs a few queries.
 # Everything happens in a temporary HOME, so ~/.garnata is never touched.
 #
+# The last section also exercises delItem (weight sets and indexes).
+#
 # Usage: test/smoke_test.sh [path/to/bin]   (or simply: make test)
 
 set -u
@@ -86,6 +88,23 @@ query structured retrieval
 expect "'structured retrieval': retrieves the Retrieval chapter" '^book1\.xml[[:space:]]+/book\[1\]/chapter\[2\]'
 query xylophone
 expect "unknown term: no results" 'No documents matching'
+
+echo "Maintenance"
+run "compute a second weight set" "$BIN/makeWeightFile" test idx w_norm norm_max
+run "delete the second weight set" sh -c "echo y | '$BIN/delItem' weight test idx w_norm"
+if [ -e "$GARNATA/weight/test_idx_w_norm" ]; then fail "weight file is gone"; else pass "weight file is gone"; fi
+run "index survives deleting a weight set" "$BIN/getInfo" index test idx
+query trains
+expect "index still answers queries" '^book2\.xml'
+if echo y | "$BIN/delItem" weight test idx no_such_weight >/dev/null 2>&1; then
+  fail "deleting a missing weight set fails"
+else
+  pass "deleting a missing weight set fails"
+fi
+run "declining confirmation keeps the index" sh -c "echo n | '$BIN/delItem' index test idx"
+run "index still listed"      "$BIN/getInfo" index test idx
+run "delete the index"        sh -c "echo y | '$BIN/delItem' index test idx"
+if ls "$GARNATA/indexes/" | grep -q '^test_idx'; then fail "index files are gone"; else pass "index files are gone"; fi
 
 echo
 if [ "$failures" -eq 0 ]; then
