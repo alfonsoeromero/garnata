@@ -6,7 +6,7 @@ Garnata is a C++ indexing and retrieval engine for collections of XML documents.
 
 It was designed and written from scratch in 2005 by Alfonso E. Romero as his final-year project (*Proyecto Fin de Carrera*) in Computer Science at the University of Granada, under the supervision of Luis M. de Campos, with the collaboration of Juan M. Fernández-Luna and Juan F. Huete (research group *Uncertainty Treatment in Intelligent Systems*, TIC-103). It was later used as the experimental platform for the group's participations in the INEX evaluation campaigns (2006–2008) and as the basis of a search prototype for the session diaries of the Parliament of Andalusia.
 
-> **Status:** this is research code from 2005–2008, published for reference and historical interest. It targets a pre-C++11 toolchain and does **not** build on a modern compiler without porting work (see [Building](#building)).
+> **Status:** research code from 2005–2008, ported to modern C++ (C++11, Xerces-C 3) in 2026. It builds without warnings on a current GCC and passes an end-to-end smoke test (`make test`). The original, untouched code is available as release [`v0.1`](https://github.com/alfonsoeromero/garnata/releases/tag/v0.1).
 
 ---
 
@@ -39,6 +39,8 @@ When the project started there was no freely licensed toolkit for this kind of w
 - precompute and store several term-weighting schemes, and swap between them to run batteries of experiments without re-indexing.
 
 The low-level design owes a great deal to Witten, Moffat and Bell's *Managing Gigabytes* ([see below](#further-reading)): the sort-based inversion algorithm, the compressed inverted files with variable-byte coding, and the general philosophy of keeping the lexicon in memory and the postings on disk all come from there, adapted to the structured case.
+
+The code in this repository is a snapshot from around the end of 2006: it corresponds to the version used in the group's first INEX participation (2006). The extensions described in the later INEX papers (tag-type importance in 2007, non-linear utility models in 2008) are not included.
 
 The full design (requirements, logical and physical levels, indexing and retrieval algorithms) is documented in the project report: [*Sistema de Recuperación de Información Estructurada para el Parlamento de Andalucía*](https://github.com/alfonsoeromero/website/blob/master/pdf/pfc.pdf) (A. E. Romero, University of Granada, 2005; in Spanish).
 
@@ -80,6 +82,8 @@ In the implementation, relevance is propagated from the leaf units containing qu
 
 SID (*Simple Influence Diagram*) and CID (*Context-based Influence Diagram*), proposed by de Campos, Fernández-Luna and Huete (IPM 2004; see [Models implemented](#models-implemented)), add decision and utility nodes on top of the BNR-SD network, so that the system ranks units by the **expected utility of retrieving them** rather than by relevance probability alone. This lets the ranking take into account the overlap between nested elements (retrieving a section and also its paragraphs). SID uses four utility values (retrieve / not retrieve × relevant / not relevant); CID additionally conditions on the relevance of the containing unit and uses eight. The utility values are set in `src/GarnataQueryXML.cpp`.
 
+As in the INEX papers, the expected utility of each unit is multiplied by a query-coverage factor, **nIdf**: the sum of the idfs of the query terms the unit contains (directly or through its contained units), divided by the sum of the idfs of all the query terms. It lies in [0, 1] and acts as a soft, idf-weighted AND, favouring units that cover more of the query. An unfinished variant that gives every unit the nIdf of its whole article is kept in `src/ID.cpp`, disabled unless `GARNATA_GLOBAL_NIDF` is defined.
+
 ### Weighting schemes
 
 `makeWeightFile` can compute two schemes for an index:
@@ -117,7 +121,7 @@ Key classes: `Garnata` (system and configuration), `Collection`, `Index`, `Index
 ├── include/              Header files
 ├── src/                  Library sources and the command-line programs (addItem.cpp, makeIndex.cpp, ...)
 ├── scripts/postInstall   Creates the ~/.garnata working directory
-├── test/                 Test utilities
+├── test/                 Smoke test (smoke_test.sh), its data, and old test utilities
 ├── Makefile              Main build (programs)
 ├── Makefile.compression  Compression library
 └── Makefile.test         Test programs
@@ -125,31 +129,29 @@ Key classes: `Garnata` (system and configuration), `Collection`, `Index`, `Index
 
 ## Building
 
-### Original requirements
+### Requirements
 
-- GNU/Linux, `g++` and `make`
-- [Xerces-C++](https://xerces.apache.org/xerces-c/) **2.x** (the code uses APIs removed in Xerces-C 3.x, such as `XMLChar1_0`)
-- A 2005-era compiler: the Makefiles use `-ansi` and `-march=nocona`
-
-### Build steps (original toolchain)
-
-The Makefiles expect `obj/`, `lib/` and `bin/` directories, which are not tracked in the repository:
+- GNU/Linux (or another Unix-like system), `make` and a C++11 compiler (tested with GCC 13 and 15)
+- [Xerces-C++](https://xerces.apache.org/xerces-c/) 3.x, with its development headers:
 
 ```bash
-mkdir -p obj lib bin
-make -f Makefile.compression   # builds lib/libcompress.a
-make                           # builds the programs into bin/
+sudo apt install libxerces-c-dev     # Debian / Ubuntu
+sudo dnf install xerces-c-devel      # Fedora
 ```
 
-### Building on a modern toolchain
+### Build and test
 
-As of today, the code does not compile with a current GCC and Xerces-C 3.x out of the box. A quick test with GCC 13 shows three kinds of problems:
+```bash
+make          # builds lib/libcompress.a and the programs into bin/
+make test     # end-to-end smoke test (see below)
+make clean    # removes the object files
+```
 
-- missing standard headers that older compilers included implicitly (`<cstdlib>`, `<cstring>`, `<algorithm>`, `<unistd.h>`);
-- code that treats `std::vector` iterators as raw pointers;
-- template code that relies on pre-standard name lookup, plus the Xerces-C 2 → 3 API changes.
+`make test` runs `test/smoke_test.sh`: it indexes a two-document collection (`test/data/`), computes and activates a weight set, and checks the results of a few queries. It works in a temporary `HOME`, so your own `~/.garnata` is never touched.
 
-The compression library builds with forced includes (`-include cstdlib -include cstring -include algorithm -fpermissive`), but the rest of the system needs a small porting effort. Contributions are welcome.
+### Original toolchain
+
+Release `v0.1` contains the code exactly as it was in 2006, which targets a pre-C++11 compiler and Xerces-C 2.x. The changes needed to build it today (missing standard headers, two-phase template lookup, `inline` functions defined in `.cpp` files, the Xerces-C 3 API, deprecated function adaptors and so on) are described one by one in the commit history.
 
 ## Usage
 
@@ -240,12 +242,19 @@ bin/delItem stopword english
 
 ## Known issues
 
-- **Does not build on modern compilers** without porting (see [Building](#building)).
 - **`delItem weight` is dangerous:** the argument parser maps the `weight` command to the *index* deletion branch, so `delItem weight COL INDEX FILE` removes the index named `INDEX` instead of the weight file. Do not use it until fixed (`src/delItem.cpp`, `processArgs`).
 - **`scripts/postInstall`, option 2**, creates a link to the literal string `direct` instead of the directory entered (`$direct` is missing).
+- `queryINEX` is hard-wired to the INEX 2006 setup (111 topics, *Thorough* task); see [INEX batch runs](#7-inex-batch-runs).
 - `queryIndexXML.cpp`, `WeightBM25.cpp` and some test programs referenced by `Makefile.test` are not part of the main build, and some of them refer to headers or files that are not in the repository.
+- Collection paths cannot contain spaces (they are read with `>>`).
 - The positional information is stored but not used by the current retrieval models (no phrase or proximity queries), and CAS queries are not implemented in the query front-ends.
 - Tuning parameters (cache sizes, lexicon size, buffer sizes) are compile-time constants in `src/Globals.cpp`.
+
+### Fixed since v0.1
+
+- **Ranking bug (top-k).** `partial_sort` was called with `vec.begin()` as the end of the range, so only the first `NUMDOCS` candidates, in processing order, were sorted and returned. With the INEX limit of 1500 results, any query matching more units than that (the usual case on the INEX Wikipedia collection) returned an essentially arbitrary subset of them. This is the bug that affected our INEX 2006 runs; it was fixed in later internal versions, but not in the snapshot published as `v0.1`.
+- **Silent indexing bug with Xerces-C 3.** The SAX `characters()` handler no longer matched the Xerces-C 3 signature, so it would have compiled but never been called, producing indexes without text. All handler methods are now marked `override`.
+- The unfinished global nIdf variant prevented the influence-diagram models from compiling; it is now disabled by default (see [SID and CID](#sid-and-cid-influence-diagram-models)).
 
 ## Publications
 
