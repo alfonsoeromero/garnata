@@ -21,6 +21,9 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <unistd.h>
 
 // ==================================================================
 
@@ -33,9 +36,17 @@ TriadPool::TriadPool(const unsigned KBytes) :
   tbuffer = deque<Triad> ( 0 );
 
   // 2.- Creation and opening of the temporal file
-  char buffer[L_tmpnam];
-  tmpnam(buffer);
-  fileName = string(buffer);
+  //    (mkstemp creates the file atomically with a unique name, unlike
+  //    tmpnam, which only returns a name that may be taken by the time
+  //    the file is opened)
+  const char* tmpdir = getenv("TMPDIR");
+  string pattern = string(tmpdir ? tmpdir : "/tmp") + "/garnataXXXXXX";
+  vector<char> buffer(pattern.begin(), pattern.end());
+  buffer.push_back('\0');
+  int fd = mkstemp(&buffer[0]);
+  if (fd == -1) Globals::errorAndExit("Cannot create temporary file (TriadPool::TriadPool). Exiting");
+  close(fd);
+  fileName = string(&buffer[0]);
   tempFile.open(fileName.c_str(), ios::binary );
   if (!tempFile) Globals::errorAndExit("Bad 'tempFile' (TriadPool::TriadPool). Exiting");
 }
