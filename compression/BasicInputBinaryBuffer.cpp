@@ -165,7 +165,7 @@ char BasicInputBinaryBuffer::operator[](unsigned i)
    
   if (( (base + i) % SIZE ) == (pos % SIZE))
   {
-    char tmp;
+    char tmp = 0;
     readByte(tmp);
     return tmp;
   } else {
