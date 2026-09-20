@@ -27,8 +27,8 @@
 #####################################################################
 
 CXX=g++
-CPPFLAGS=-c -g -O3 -pipe -W -Wall -ansi -pedantic -march=nocona
-CCFLAGS=-c -g -O3 -pipe -ansi -march=nocona
+CPPFLAGS=-c -g -O3 -pipe -W -Wall -std=c++11 -pedantic
+CCFLAGS=-c -g -O3 -pipe -std=c++11
 COMPRESSION=./compression
 INCLUDE=./include
 OBJ=./obj
