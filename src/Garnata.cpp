@@ -209,12 +209,17 @@ bool Garnata::delWeightFile(string indexName, string file)
     if (std::find(v.begin(), v.end(), indexName) == v.end()) // not found
       return false;
 
+    // check that the weight file exists before touching the index
+    string weightFile = Globals::home_weight + current->getName() + "_" + indexName + "_" + file;
+    if (!Globals::fileExists(weightFile))
+      return false;
+
     Index in(*current);
     in.read(indexName);
     in.delWeight(file);
     in.write();
     
-    if (remove((Globals::home_weight + current->getName() + "_" + indexName + "_" + file).c_str()) == -1)
+    if (remove(weightFile.c_str()) == -1)
       return false;
 	  
 	  

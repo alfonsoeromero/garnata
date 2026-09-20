@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <cstring>
 #include "Collection.h"
 #include "Globals.h" 
 #include <fstream>
@@ -164,7 +166,7 @@ void Collection::addIndex(string indexName)
 
 void Collection::removeIndex(string indexName)
 {
-  indexes.erase( remove( indexes.begin(), indexes.end(), indexName ), indexes.end() );
+  indexes.erase( std::remove( indexes.begin(), indexes.end(), indexName ), indexes.end() );
 }
 
 // ==================================================================

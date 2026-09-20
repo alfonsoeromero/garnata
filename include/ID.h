@@ -63,11 +63,14 @@ class ID : public _BNR_SD<T> {
     */
     void computeNIdf(vector<NodeGroup<T> >& groups, const Lexicon& L);
 
+#ifdef GARNATA_GLOBAL_NIDF
     /** Compute the NIdfs of the list of nodes, assigning the nIdf of the container article
+    (unfinished, see ID.cpp)
     @param groups list of grous, whose descendants are the nodes
     @param L current index lexicon
     */
     void computeGlobalNIdf(vector<NodeGroup<T> >& groups, const Lexicon& L);
+#endif
 
     /** Makes a query to the system
     @param pq 

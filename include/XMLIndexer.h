@@ -46,21 +46,21 @@ class XMLIndexer : public DefaultHandler
     // -----------------------------------------------------------------------
     //  Handlers for the SAX ContentHandler interface
     // -----------------------------------------------------------------------
-    void startElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs);
-    void endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname);
-    void characters(const XMLCh* const chars, const unsigned int length);
+    void startElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs) override;
+    void endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname) override;
+    void characters(const XMLCh* const chars, const XMLSize_t length) override;
 
     void startDTD( const XMLCh* const name, const XMLCh* const publicId, 
-      const XMLCh* const systemId);
+      const XMLCh* const systemId) override;
     
-    void startEntity (const XMLCh *const name);
+    void startEntity (const XMLCh *const name) override;
     // -----------------------------------------------------------------------
     //  Handlers for the SAX ErrorHandler interface
     // -----------------------------------------------------------------------
-    void warning(const SAXParseException& exc);
-    void error(const SAXParseException& exc);
-    void fatalError(const SAXParseException& exc);
-    void resetErrors();
+    void warning(const SAXParseException& exc) override;
+    void error(const SAXParseException& exc) override;
+    void fatalError(const SAXParseException& exc) override;
+    void resetErrors() override;
     
     // own functions
     void parseFile(const string& fileName);

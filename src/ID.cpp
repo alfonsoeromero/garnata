@@ -29,7 +29,14 @@
 #include "NodeResult_SID.h"
 #include "NodeResult_CID.h"
 
-const bool globalIDF = true;
+// Two nIdf normalisation variants exist:
+//  - computeNIdf(): per-unit nIdf, propagated from each final unit to
+//    the complex units that contain it (complete, used by default).
+//  - computeGlobalNIdf(): assigns every unit the nIdf of its container
+//    article. This variant was left unfinished (it relies on NodeResult
+//    links to contained units and to the root that were never
+//    implemented), so it is only compiled if GARNATA_GLOBAL_NIDF is
+//    defined.
 
 
 // ==================================================================
@@ -59,17 +66,19 @@ vector< Result >  ID<T> ::makeQuery(const ProcessedQuery& pq)
   vector< NodeGroup<T> > groups;
     
   // ================= 1st step: we propagate probabilities to the final units ===================
-  propagateFinalUnits(pq, N_final, groups);
+  this->propagateFinalUnits(pq, N_final, groups);
   
   // =================== 2nd step: we propagate probabilities to the complex units ===================
-  propagateComplexUnits(N_final, N_complex);
+  this->propagateComplexUnits(N_final, N_complex);
   
   // =================== 3rd step: we readjust probability values, and
   // =================== construct a list of nodes instead two maps  
   // RSV computation
-  if (!globalIDF)
-    computeNIdf(groups, *(_BNR_SD<T>::L) );
-  else computeGlobalNIdf( groups, *(_BNR_SD<T>::L) );
+#ifdef GARNATA_GLOBAL_NIDF
+  computeGlobalNIdf( groups, *(_BNR_SD<T>::L) );
+#else
+  computeNIdf(groups, *(_BNR_SD<T>::L) );
+#endif
   
   for (typename std::map<unsigned, T*>::iterator it=N_final.begin(), end=N_final.end(); it!=end; ++it)
   {
@@ -88,14 +97,14 @@ vector< Result >  ID<T> ::makeQuery(const ProcessedQuery& pq)
   _BNR_SD<T>::makeListOfNodes(vec, N_final, N_complex);
   
   // we sort the vector by RSV of each unit
-  partial_sort(vec.begin(), vec.begin() + std::min((unsigned)vec.size(), _BNR_SD<T>::NUMDOCS), vec.begin(), NodeResult_ID_Ptr<T>());
+  partial_sort(vec.begin(), vec.begin() + std::min((unsigned)vec.size(), _BNR_SD<T>::NUMDOCS), vec.end(), NodeResult_ID_Ptr<T>());
   
   // ================ 4th step: list is cut down, if needed =====================================
-  cutDownNodeResultVector (vec);
+  this->cutDownNodeResultVector(vec);
 
   // ================ 6th step: building of the result =====================================
   vector<Result> res;
-  buildResult(res, vec, _BNR_SD<T>::dtds->getDTDbyId(0) );
+  this->buildResult(res, vec, _BNR_SD<T>::dtds->getDTDbyId(0) );
   
   // Return value
   return res;
@@ -103,6 +112,7 @@ vector< Result >  ID<T> ::makeQuery(const ProcessedQuery& pq)
 
 // ==================================================================
 
+#ifdef GARNATA_GLOBAL_NIDF
 template<typename T>
 void ID<T>::computeGlobalNIdf(vector<NodeGroup<T> >& groups, const Lexicon& L)
 {
@@ -179,6 +189,8 @@ void ID<T>::computeGlobalNIdf(vector<NodeGroup<T> >& groups, const Lexicon& L)
       (*_it)->addNIdf( _nidf );
   }
 }
+#endif // GARNATA_GLOBAL_NIDF
+
 
 
 // ==================================================================

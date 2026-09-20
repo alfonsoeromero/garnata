@@ -77,7 +77,7 @@ void Term::dump(ofstream& out) const
   // -  3 unsigned => id, freq and numdocs
   // -  length of termString + 1 ('\0')
   // -  offset in the occurrence file
-  unsigned tmp[] = {4*sizeof(unsigned) + (length+1)*sizeof(char) + sizeof(long), id, freq, numDocs};
+  unsigned tmp[] = {static_cast<unsigned>(4*sizeof(unsigned) + (length+1)*sizeof(char) + sizeof(long)), id, freq, numDocs};
 
   // Order in binary file =>
   // 1st, 2nd, 3rd, 4th => totalsize, id, freq, numDocs 

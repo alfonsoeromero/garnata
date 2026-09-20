@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
 #include "Globals.h"
 #include <iostream>
 #include <cstdio>
@@ -48,7 +49,7 @@ string Globals::home_stopwords = home + string("stopwords/");
 
 // ==================================================================
 
-void Globals::showWarning(char* _message)
+void Globals::showWarning(const char* _message)
 {
   std::cerr << _message << endl << flush;
   std::clog << "[WARNING!] " << _message << endl << flush;
@@ -56,7 +57,7 @@ void Globals::showWarning(char* _message)
 
 // ==================================================================
 
-void Globals::errorAndExit(char* _error) 
+void Globals::errorAndExit(const char* _error) 
 {
   std::cerr << _error << endl << flush;
   exit(-1);

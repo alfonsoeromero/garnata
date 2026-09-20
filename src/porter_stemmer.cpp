@@ -13,6 +13,8 @@
  *   - compiled as C++ (C++ headers, 'using namespace std');
  *   - entry point renamed from stem() to porter_stem() and exported
  *     (the demo main() and file-handling code have been removed).
+ *   - ends(), setto() and r() take 'const char*', since they are called
+ *     with string literals (not allowed as 'char*' in standard C++).
  *
  * The original author's notes follow unchanged.
  */
@@ -143,7 +145,7 @@ int cvc(int i)
 
 /* ends(s) is TRUE <=> k0,...k ends with the string s. */
 
-int ends(char * s)
+int ends(const char * s)
 {  int length = s[0];
    if (s[length] != b[k]) return FALSE; /* tiny speed-up */
    if (length > k-k0+1) return FALSE;
@@ -155,7 +157,7 @@ int ends(char * s)
 /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
    k. */
 
-void setto(char * s)
+void setto(const char * s)
 {  int length = s[0];
    memmove(b+j+1,s+1,length);
    k = j+length;
@@ -163,7 +165,7 @@ void setto(char * s)
 
 /* r(s) is used further down. */
 
-void r(char * s) { if (m() > 0) setto(s); }
+void r(const char * s) { if (m() > 0) setto(s); }
 
 /* step1ab() gets rid of plurals and -ed or -ing. e.g.
 

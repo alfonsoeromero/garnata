@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cstdlib>
 #include "BasicInputBinaryBuffer.h"
 
 // ===========================================================================
@@ -164,7 +165,7 @@ char BasicInputBinaryBuffer::operator[](unsigned i)
    
   if (( (base + i) % SIZE ) == (pos % SIZE))
   {
-    char tmp;
+    char tmp = 0;
     readByte(tmp);
     return tmp;
   } else {

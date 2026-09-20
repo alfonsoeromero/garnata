@@ -134,7 +134,7 @@ void UnitCache::preloadCache(void)
   
     // for each cache slot... we get the candidates vec(i) + vec(factor)
     vector<unsigned> candidates = factors;
-    transform(candidates.begin(), candidates.end(), candidates.begin(), bind2nd(plus<unsigned>(), i));
+    transform(candidates.begin(), candidates.end(), candidates.begin(), [i](unsigned x) { return x + i; });
     
     // we remove those greater than NUM_UNITS
     vector<unsigned>::iterator new_end = upper_bound(candidates.begin(), candidates.end(), NUM_UNITS-1);
@@ -196,7 +196,7 @@ void UnitCache::preloadCache(void)
   
     // for each cache slot... we get the candidates vec(i) + vec(factor)
     vector<unsigned> candidates = factors;
-    transform(candidates.begin(), candidates.end(), candidates.begin(), bind2nd(plus<unsigned>(), i));
+    transform(candidates.begin(), candidates.end(), candidates.begin(), [i](unsigned x) { return x + i; });
 
     // we remove those greater than NUM_UNITS
     vector<unsigned>::iterator new_end = upper_bound(candidates.begin(), candidates.end(), NUM_UNITS-1);

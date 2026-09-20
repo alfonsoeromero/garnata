@@ -27,8 +27,8 @@
 #####################################################################
 
 CXX=g++
-CPPFLAGS=-c -g -O3 -pipe -W -Wall -ansi -pedantic -march=nocona
-CCFLAGS=-c -g -O3 -pipe -ansi -march=nocona
+CPPFLAGS=-c -g -O3 -pipe -W -Wall -std=c++11 -pedantic
+CCFLAGS=-c -g -O3 -pipe -std=c++11
 COMPRESSION=./compression
 INCLUDE=./include
 OBJ=./obj
@@ -39,7 +39,7 @@ LIB=./lib
 #####################################################################
 # Command to make an object file:
 
-COMPILE = $(CXX) -I $(INCLUDE) $(CCFLAGS) -c
+COMPILE = $(CXX) -I $(INCLUDE) $(CCFLAGS) -MMD -MP -c
 
 #####################################################################
 
@@ -90,7 +90,16 @@ addItem_OBJS=$(OBJ)/addItem.o $(OBJ)/Collection.o $(OBJ)/Index.o $(OBJ)/Globals.
 
 #####################################################################
 
+# Output directories are not tracked by git: create them if missing
+$(shell mkdir -p $(OBJ) $(BIN) $(LIB))
+
 all: $(ALL_LIBS) $(ALL_PROGRAMS)
+
+# End-to-end smoke test (test/smoke_test.sh)
+test: all
+	@./test/smoke_test.sh $(BIN)
+
+.PHONY: all test clean libcompress
 
 libcompress : $(COMPRESSION)/*.cpp
 	make -f Makefile.compression
@@ -143,8 +152,11 @@ addItem :  $(addItem_OBJS)
 
 clean :
 	@echo Deleting object files...
-	@\rm $(OBJ)/*
-	
+	@\rm -f $(OBJ)/*
+
+# Automatically generated header dependencies (see -MMD above)
+-include $(wildcard $(OBJ)/*.d)
+
 #####################################################################
 
 

@@ -37,7 +37,7 @@ void OutputCompressedBinaryFile::open (const string& name, unsigned _SIZE=4096)
 
 // ===========================================================================
 
-inline void OutputCompressedBinaryFile::writeFloat (float f) 
+void OutputCompressedBinaryFile::writeFloat (float f) 
 {
   // the size of this buffer is 8 because of alignment purposes. It could be only 5
   char buff[8];
@@ -51,7 +51,7 @@ inline void OutputCompressedBinaryFile::writeFloat (float f)
 
 // ===========================================================================
 
-inline void OutputCompressedBinaryFile::writeUnsigned (unsigned u) 
+void OutputCompressedBinaryFile::writeUnsigned (unsigned u) 
 {
   // the size of this buffer is 8 because of alignment purposes. It could be only 5
   char buff[8];
@@ -65,7 +65,7 @@ inline void OutputCompressedBinaryFile::writeUnsigned (unsigned u)
 
 // ===========================================================================
 
-inline void OutputCompressedBinaryFile::writeLong(long l) 
+void OutputCompressedBinaryFile::writeLong(long l) 
 {
   // the size of this buffer is 10 because of alignment purposes. It could be only 9
   char buff[10];
@@ -83,7 +83,7 @@ inline void OutputCompressedBinaryFile::writeLong(long l)
 void OutputCompressedBinaryFile::writeUnsignedList(const vector<unsigned>& array)
 {
   writeUnsigned (array.size());
-  for_each(array.begin(), array.end(), bind1st(mem_fun(&OutputCompressedBinaryFile::writeUnsigned), this));
+  for_each(array.begin(), array.end(), [this](unsigned u) { writeUnsigned(u); });
 }
 
 // ===========================================================================
@@ -91,7 +91,7 @@ void OutputCompressedBinaryFile::writeUnsignedList(const vector<unsigned>& array
 void OutputCompressedBinaryFile::writeFloatList(const vector<float>& array)
 {
   writeUnsigned (array.size());
-  for_each(array.begin(), array.end(), bind1st(mem_fun(&OutputCompressedBinaryFile::writeFloat), this));
+  for_each(array.begin(), array.end(), [this](float f) { writeFloat(f); });
 }
 
 // ===========================================================================
@@ -99,7 +99,7 @@ void OutputCompressedBinaryFile::writeFloatList(const vector<float>& array)
 void OutputCompressedBinaryFile::writeLongList(const vector<long>& array)
 {
   writeUnsigned (array.size());
-  for_each(array.begin(), array.end(), bind1st(mem_fun(&OutputCompressedBinaryFile::writeLong), this));
+  for_each(array.begin(), array.end(), [this](long l) { writeLong(l); });
 }
 
 // ===========================================================================
@@ -135,7 +135,7 @@ void OutputCompressedBinaryFile::writeBoundedLongList(const vector<long>& array)
   vector<long>::const_iterator mini = std::min_element(array.begin(), array.end());
   vector<long> array2 = array;
   long minimum = *mini;
-  transform(array2.begin(), array2.end(), array2.begin(), bind2nd(minus<long>(), minimum) );
+  transform(array2.begin(), array2.end(), array2.begin(), [minimum](long x) { return x - minimum; } );
 
   writeLong(minimum);  
   writeLongList(array2);

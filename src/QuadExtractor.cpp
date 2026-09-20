@@ -42,7 +42,7 @@ void QuadExtractor::add(const string& _s)
 {
     string s = _s;
     // for each term appearing on this unit
-    std::replace_if(s.begin(), s.end(), std::bind2nd(std::equal_to<char>(),'\\'), ' ');
+    std::replace_if(s.begin(), s.end(), [](char c) { return c == '\\'; }, ' ');
     
     istringstream is(s);
     
@@ -143,7 +143,7 @@ void QuadExtractor::getTermListAndFrequencies(vector<unsigned>& _terms, vector<u
 
 // ==================================================================
 
-inline string QuadExtractor::transform(const string& s) const
+string QuadExtractor::transform(const string& s) const
 {
   // transform a string for being indexed
   string salida;
@@ -156,7 +156,7 @@ inline string QuadExtractor::transform(const string& s) const
 
 // ==================================================================
 
-inline bool QuadExtractor::valid(char c) const
+bool QuadExtractor::valid(char c) const
 {
   // Size MUST be a multiple of four !. DO NOT ADD YOUR OWN CHARACTERS,
   // ONLY GROUPS OF FOUR CHARACTERS

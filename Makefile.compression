@@ -28,7 +28,7 @@
 #####################################################################
 
 CXX=g++
-CFLAGS=-c -g -O3 -pipe -W -Wall -ansi -pedantic -march=nocona
+CFLAGS=-c -g -O3 -pipe -W -Wall -std=c++11 -pedantic
 OBJ=./obj
 SRC=./compression
 LIB=./lib
@@ -36,6 +36,9 @@ LIB=./lib
 #####################################################################
 # Library 
 #####################################################################
+
+# Output directories are not tracked by git: create them if missing
+$(shell mkdir -p $(OBJ) $(LIB))
 
 all: libcompress
 

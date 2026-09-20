@@ -192,7 +192,7 @@ Term* Lexicon::getTermFromOrder(unsigned o) const
 
 // ==================================================================
 
-inline int Lexicon::compareTerms(const void* elem1, const void* elem2)
+int Lexicon::compareTerms(const void* elem1, const void* elem2)
 {
   // Keep an eye open! 
   // elem1 AND elem2 should be both Term* (pointer to term)

@@ -94,7 +94,7 @@ map<unsigned, float> RetrievalModel::occurrs(unsigned idTerm) const
 
 // ==================================================================
 
-inline string RetrievalModel::transform(const string& s) const 
+string RetrievalModel::transform(const string& s) const 
 {
   // transform a string for being indexed
   string salida;
@@ -107,7 +107,7 @@ inline string RetrievalModel::transform(const string& s) const
 
 // ==================================================================
 
-inline bool RetrievalModel::valid(char c) const 
+bool RetrievalModel::valid(char c) const 
 {
   // Size MUST be a multiple of four !. DO NOT ADD YOUR OWN CHARACTERS,
   // ONLY GROUPS OF FOUR CHARACTERS

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<book>
+  <title>Bayesian networks</title>
+  <chapter>
+    <title>Introduction</title>
+    <section>
+      <p>Bayesian networks represent uncertainty with probabilities.</p>
+      <p>Inference propagates evidence through the network.</p>
+    </section>
+    <section>
+      <p>Structured documents are trees of elements.</p>
+    </section>
+  </chapter>
+  <chapter>
+    <title>Retrieval</title>
+    <section>
+      <p>Information retrieval ranks documents by relevance.</p>
+      <p>Structured retrieval returns sections and paragraphs.</p>
+    </section>
+  </chapter>
+</book>

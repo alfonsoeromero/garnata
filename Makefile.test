@@ -27,7 +27,7 @@ LIB=lib
 INC=include
 COMP=compression
 CXX=g++
-CXXFLAGS=-g -O3 -pipe -march=nocona -W -Wall
+CXXFLAGS=-g -O3 -pipe -W -Wall
 
 
 all : testCompression testOccurrence testUnit

@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <xercesc/util/XMLChar.hpp>
 #include "XMLAdditional.h"
 #include <xercesc/sax/SAXParseException.hpp>
 #include <xercesc/sax/SAXException.hpp>
@@ -96,7 +97,7 @@ void XMLIndexer::startEntity (const XMLCh *const name)
 // ==================================================================
 
 void XMLIndexer::characters(const XMLCh* const chars, 
-                            const unsigned int length)
+                            const XMLSize_t length)
 { 
 
   if(XMLChar1_0::isAllSpaces(chars, length)) return; 
