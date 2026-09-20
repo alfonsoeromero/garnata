@@ -277,7 +277,7 @@ If you use Garnata in academic work, please cite the IPMU 2006 paper, together w
 
 ## Author and acknowledgements
 
-Written by **Alfonso E. Romero** ([github.com/alfonsoeromero](https://github.com/alfonsoeromero)) at the Department of Computer Science and Artificial Intelligence, University of Granada.
+Written by **Alfonso E. Romero** ([github.com/alfonsoeromero](https://github.com/alfonsoeromero)) while at the Department of Computer Science and Artificial Intelligence, University of Granada.
 
 Thanks to Luis M. de Campos (project supervisor), Juan M. Fernández-Luna (who defined the system requirements and advised on the implementation) and Juan F. Huete, and to the University of Granada, whose research initiation grant funded the original work.
 
