@@ -39,7 +39,7 @@ LIB=./lib
 #####################################################################
 # Command to make an object file:
 
-COMPILE = $(CXX) -I $(INCLUDE) $(CCFLAGS) -c
+COMPILE = $(CXX) -I $(INCLUDE) $(CCFLAGS) -MMD -MP -c
 
 #####################################################################
 
@@ -143,8 +143,11 @@ addItem :  $(addItem_OBJS)
 
 clean :
 	@echo Deleting object files...
-	@\rm $(OBJ)/*
-	
+	@\rm -f $(OBJ)/*
+
+# Automatically generated header dependencies (see -MMD above)
+-include $(wildcard $(OBJ)/*.d)
+
 #####################################################################
 
 
