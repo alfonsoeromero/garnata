@@ -38,7 +38,6 @@ WeightInserter::WeightInserter(const Collection& _c, string _identifier) : Index
 
 // ==================================================================
 
-inline
 void WeightInserter::processUnit(unsigned id, float w, fstream& fp) const
 {
   UnitReader u(id);

@@ -37,7 +37,7 @@ OccurrenceFile::OccurrenceFile (const Lexicon& lex, const string& fileName) : L(
 
 // ==================================================================
 
-inline void OccurrenceFile::writeOccurrence(const vector<Quad>& vq)
+void OccurrenceFile::writeOccurrence(const vector<Quad>& vq)
 {
   unsigned termId = vq[0].getId();
   unsigned _num = vq.size();
@@ -63,7 +63,7 @@ inline void OccurrenceFile::writeOccurrence(const vector<Quad>& vq)
 
 // ==================================================================
 
-inline void OccurrenceFile::flush(bool final)
+void OccurrenceFile::flush(bool final)
 {
   unsigned end;
   if (!final)

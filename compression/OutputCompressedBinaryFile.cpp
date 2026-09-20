@@ -37,7 +37,7 @@ void OutputCompressedBinaryFile::open (const string& name, unsigned _SIZE=4096)
 
 // ===========================================================================
 
-inline void OutputCompressedBinaryFile::writeFloat (float f) 
+void OutputCompressedBinaryFile::writeFloat (float f) 
 {
   // the size of this buffer is 8 because of alignment purposes. It could be only 5
   char buff[8];
@@ -51,7 +51,7 @@ inline void OutputCompressedBinaryFile::writeFloat (float f)
 
 // ===========================================================================
 
-inline void OutputCompressedBinaryFile::writeUnsigned (unsigned u) 
+void OutputCompressedBinaryFile::writeUnsigned (unsigned u) 
 {
   // the size of this buffer is 8 because of alignment purposes. It could be only 5
   char buff[8];
@@ -65,7 +65,7 @@ inline void OutputCompressedBinaryFile::writeUnsigned (unsigned u)
 
 // ===========================================================================
 
-inline void OutputCompressedBinaryFile::writeLong(long l) 
+void OutputCompressedBinaryFile::writeLong(long l) 
 {
   // the size of this buffer is 10 because of alignment purposes. It could be only 9
   char buff[10];

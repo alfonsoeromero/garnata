@@ -68,7 +68,7 @@ void BasicOutputBinaryBuffer::open(const string& name, unsigned _SIZE)
 
 // ===========================================================================
 
-inline void BasicOutputBinaryBuffer::flush()
+void BasicOutputBinaryBuffer::flush()
 {
   file.write ((char*) buffer, pos);
   pos = 0;
