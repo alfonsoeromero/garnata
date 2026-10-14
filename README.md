@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/garnata-logo.png" alt="Garnata — XML Information Retrieval" width="900">
+</p>
+
 # Garnata
 
 **An XML (structured document) information retrieval system based on probabilistic graphical models.**
