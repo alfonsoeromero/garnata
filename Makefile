@@ -39,7 +39,7 @@ LIB=./lib
 #####################################################################
 # Command to make an object file:
 
-COMPILE = $(CXX) -I $(INCLUDE) $(CCFLAGS) -MMD -MP -c
+COMPILE = $(CXX) -I $(INCLUDE) -I $(COMPRESSION) $(CCFLAGS) -MMD -MP -c
 
 #####################################################################
 
