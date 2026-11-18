@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Xerces-C
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libxerces-c-dev
+
+      - name: Build
+        run: make 2>&1 | tee build.log
+
+      - name: Check for compiler warnings
+        run: |
+          if grep -q 'warning:' build.log; then
+            grep 'warning:' build.log
+            exit 1
+          fi
+
+      - name: Test
+        run: make test
