@@ -21,7 +21,7 @@ Garnata is a C++ indexing and retrieval engine for collections of XML documents.
 
 It was designed and written from scratch in 2005 by Alfonso E. Romero as his final-year project (*Proyecto Fin de Carrera*) in Computer Science at the University of Granada, under the supervision of Luis M. de Campos, with the collaboration of Juan M. Fernández-Luna and Juan F. Huete (research group *Uncertainty Treatment in Intelligent Systems*, TIC-103). It was later used as the experimental platform for the group's participations in the INEX evaluation campaigns (2006–2008) and as the basis of a search prototype for the session diaries of the Parliament of Andalusia.
 
-> **Status:** research code from 2005–2008, ported to modern C++ (C++11, Xerces-C 3) in 2026. It builds without warnings on a current GCC and passes an end-to-end smoke test (`make test`). The original, untouched code is available as release [`v0.1`](https://github.com/alfonsoeromero/garnata/releases/tag/v0.1).
+> **Status:** research code from 2005–2008, ported to modern C++ (C++11, Xerces-C 3) in 2026. It builds without warnings on a current GCC and passes its unit and end-to-end tests (`make test`), checked on every push by GitHub Actions. The original, untouched code is available as release [`v0.1`](https://github.com/alfonsoeromero/garnata/releases/tag/v0.1).
 
 ---
 
@@ -132,14 +132,15 @@ Key classes: `Garnata` (system and configuration), `Collection`, `Index`, `Index
 
 ```
 .
-├── compression/          Variable-byte coder and compressed binary file I/O (built as lib/libcompress.a)
-├── include/              Header files
+├── compression/          Variable-byte coder and compressed binary file I/O, with its headers (built as lib/libcompress.a)
+├── include/              Header files of the main library
 ├── src/                  Library sources and the command-line programs (addItem.cpp, makeIndex.cpp, ...)
 ├── scripts/postInstall   Creates the ~/.garnata working directory
-├── test/                 Smoke test (smoke_test.sh), its data, and old test utilities
+├── test/                 Smoke test (smoke_test.sh), its data, and an index-file dump utility
+├── .github/workflows/    CI: build (warnings are errors) and `make test` on Ubuntu
 ├── Makefile              Main build (programs)
 ├── Makefile.compression  Compression library
-└── Makefile.test         Test programs
+└── Makefile.test         Unit tests
 ```
 
 ## Building
@@ -158,15 +159,17 @@ sudo dnf install xerces-c-devel      # Fedora
 
 ```bash
 make          # builds lib/libcompress.a and the programs into bin/
-make test     # end-to-end smoke test (see below)
+make test     # unit tests + end-to-end smoke test (see below)
 make clean    # removes the object files
 ```
 
-`make test` runs `test/smoke_test.sh`: it indexes a two-document collection (`test/data/`), computes and activates a weight set, and checks the results of a few queries. It works in a temporary `HOME`, so your own `~/.garnata` is never touched.
+`make test` first runs the unit tests in `Makefile.test` (a round-trip test of the variable-byte compressed files: 300,000 random values written, read back sequentially and after repositioning, and compared), and then `test/smoke_test.sh`, which indexes a two-document collection (`test/data/`), computes and activates a weight set, and checks the results of a few queries. It works in a temporary `HOME`, so your own `~/.garnata` is never touched.
 
 ### Original toolchain
 
 Release `v0.1` contains the code exactly as it was in 2006, which targets a pre-C++11 compiler and Xerces-C 2.x. The changes needed to build it today (missing standard headers, two-phase template lookup, `inline` functions defined in `.cpp` files, the Xerces-C 3 API, deprecated function adaptors and so on) are described one by one in the commit history.
+
+The port deliberately keeps the original design and coding style (raw pointers, `using namespace std` in headers, hand-written Makefiles): the goal was to make the 2005 system build and run correctly today, not to rewrite it, so that the code still documents how it was built.
 
 ## Usage
 
@@ -260,7 +263,7 @@ bin/delItem stopword english
 
 - **`scripts/postInstall`, option 2**, creates a link to the literal string `direct` instead of the directory entered (`$direct` is missing).
 - `queryINEX` is hard-wired to the INEX 2006 setup (111 topics, *Thorough* task); see [INEX batch runs](#7-inex-batch-runs).
-- `queryIndexXML.cpp`, `WeightBM25.cpp` and some test programs referenced by `Makefile.test` are not part of the main build, and some of them refer to headers or files that are not in the repository.
+- `queryIndexXML.cpp` and `WeightBM25.cpp` are not part of the main build, and refer to headers or files that are not in the repository.
 - Collection paths cannot contain spaces (they are read with `>>`).
 - The positional information is stored but not used by the current retrieval models (no phrase or proximity queries), and CAS queries are not implemented in the query front-ends.
 - Tuning parameters (cache sizes, lexicon size, buffer sizes) are compile-time constants in `src/Globals.cpp`.
