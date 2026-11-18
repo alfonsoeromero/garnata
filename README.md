@@ -1,6 +1,17 @@
 <p align="center">
   <img src="docs/images/garnata-logo.png" alt="Garnata — XML Information Retrieval" width="900">
 </p>
+<p align="center">
+  <a href="https://github.com/alfonsoeromero/garnata/actions">
+    <img src="https://github.com/alfonsoeromero/garnata/actions/workflows/ci.yml/badge.svg?branch=main" alt="Build Status">
+  </a>
+  <a href="https://github.com/alfonsoeromero/garnata/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/alfonsoeromero/garnata" alt="License">
+  </a>
+  <a href="https://github.com/alfonsoeromero/garnata/releases">
+    <img src="https://img.shields.io/github/v/release/alfonsoeromero/garnata" alt="Latest Release">
+  </a>
+</p>
 
 # Garnata
 
