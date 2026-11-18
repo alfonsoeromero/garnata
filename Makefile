@@ -98,6 +98,7 @@ all: $(ALL_LIBS) $(ALL_PROGRAMS)
 # Unit tests (Makefile.test) and end-to-end smoke test (test/smoke_test.sh)
 test: all
 	@$(MAKE) --no-print-directory -f Makefile.test check
+	@$(MAKE) --no-print-directory -f Makefile.test check
 	@./test/smoke_test.sh $(BIN)
 
 .PHONY: all test clean libcompress
